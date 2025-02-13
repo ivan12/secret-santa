@@ -45,21 +45,34 @@ const Drawing = () => {
         const [name, email] = currentParticipant.split(', ');
         setMessage('Sending email to ' + name + '...');
 
-        const response = await fetch(
-            'https://script.google.com/macros/s/AKfycbwKBLSl0WucKJbHNFRppeV1Yae0nOmZYE5f_4TM9Q999yMAWwQx2uDmsBR9ccvwjvMBNQ/exec',
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    to: email,
-                    subject: `${name} - Your Secret Santa is here!`,
-                    message: `Congratulations ${name}, you got -> ${friendName}!`,
-                }),
+        try {
+            const response = await fetch(
+                'https://script.google.com/macros/s/AKfycbwKBLSl0WucKJbHNFRppeV1Yae0nOmZYE5f_4TM9Q999yMAWwQx2uDmsBR9ccvwjvMBNQ/exec',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        to: email,
+                        subject: `${name} - Your Secret Santa is here!`,
+                        message: `Congratulations ${name}, you got -> ${friendName}!`,
+                    }),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to send email');
             }
-        );
-        const result = await response.text();
-        setMessage(result);
-        setLoading(false);
+
+            const result = await response.text();
+            setMessage(result);
+        } catch (error) {
+            setMessage(
+                'An error occurred while trying to send one of the emails! Please try again later ;)'
+            );
+            console.error(error); // Exibe o erro no console para depuração
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
