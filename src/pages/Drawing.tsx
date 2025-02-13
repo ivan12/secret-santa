@@ -47,7 +47,7 @@ const Drawing = () => {
 
         try {
             const response = await fetch(
-                'https://script.google.com/macros/s/AKfycbwweBltbDLrNUQD59x5q_vk0olH-98m_los4ih7OzH1hteOx-6Ympy93EafPovfgSzpSQ/exec',
+                'https://script.google.com/macros/s/AKfycbxLJUz2LovHdz5JrhBy0Db4scuK1dTssvqG8S1OcL08no6V4Jmlc-_1wiGyUctwkNiGUg/exec',
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
