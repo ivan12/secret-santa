@@ -42,8 +42,8 @@ const Drawing = () => {
         const [name, email] = currentParticipant.split(', ');
         setMessage('Sending email to ' + name + '...');
         console.log('sendEmail!!');
-        console.log('currentParticipant >> ', currentParticipant);
-        console.log('secretFriend >> ', secretFriend);
+        console.log(`currentParticipant >> ${name} & ${email}`);
+        console.log(`secretFriend >> ${friendName} & ${friendEmail}`);
 
         try {
             const response = await fetch(
