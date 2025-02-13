@@ -27,10 +27,10 @@
     box-sizing: border-box;
     border: 2px solid black;
     font-size: 20px;
-    color: #000000;
+    color: #FFF;
     box-shadow: 2px 2px 0px 1px #000000;
     cursor: pointer;
-    background-color: #c4c4c4;
+    background-color: #2F2F2F;
 }
 
 .input-btn-group button:hover {
