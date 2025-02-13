@@ -46,7 +46,7 @@ const Drawing = () => {
         setMessage('Sending email to ' + name + '...');
 
         const response = await fetch(
-            'https://script.google.com/macros/s/AKfycbySteOINnsVe_uZxwLl575raHCB8ac_IJ0k9uX19nYKin4Oy-4z4zkvUgia8PH3iUndpA/exec',
+            'https://script.google.com/macros/s/AKfycbxgL3pr6PiUIu_R-RxoO1isnQhqulT4yo72FOT1eoO15Uy4py12_RZ9i8l5z7-mDVQqLg/exec',
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
