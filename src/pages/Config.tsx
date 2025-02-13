@@ -7,7 +7,7 @@ const Configuration = () => {
     return (
         <Card>
             <section>
-                <h2>Let's get started!</h2>
+                <h2>Let's get started! (Min 3 people)</h2>
                 <Form />
                 <ParticipantsList />
                 <Footer />
