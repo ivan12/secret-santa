@@ -23,6 +23,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
+        "prod": "react-scripts build && react-scripts start",
         "dev": "next dev",
         "clean": "npm cache clean --force",
         "build": "react-scripts build",

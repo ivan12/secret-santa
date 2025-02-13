@@ -22,11 +22,9 @@ const Drawing = () => {
         try {
             participants.forEach(async currentParticipant => {
                 if (result.has(currentParticipant)) {
-                    secretFriend = result.get(currentParticipant);
-                    let secretFriendName =
-                        secretFriend?.split(', ')[0] ||
-                        "Could not fetch your secret friend's name! Correct input format is 'Name, Email of your friend!'";
-                    await sendEmail(currentParticipant, secretFriendName);
+                    secretFriend =
+                        result.get(currentParticipant) ?? 'Unable to get name! Try again!';
+                    await sendEmail(currentParticipant, secretFriend);
                 }
             });
             setMessage('All emails sent successfully! Check your email ;)');
@@ -38,12 +36,14 @@ const Drawing = () => {
         }
     };
 
-    const sendEmail = async (currentParticipant: string, friendName: string) => {
-        console.log('sendEmail >> currentParticipant >> ', currentParticipant);
-        console.log('sendEmail >> friendName >> ', friendName);
+    const sendEmail = async (currentParticipant: string, secretFriend: string) => {
         setLoading(true);
+        const [friendName, friendEmail] = secretFriend.split(', ');
         const [name, email] = currentParticipant.split(', ');
         setMessage('Sending email to ' + name + '...');
+        console.log('sendEmail!!');
+        console.log('currentParticipant >> ', currentParticipant);
+        console.log('secretFriend >> ', secretFriend);
 
         try {
             const response = await fetch(
