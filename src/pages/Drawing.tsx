@@ -47,9 +47,10 @@ const Drawing = () => {
 
         try {
             const response = await fetch(
-                'https://script.google.com/macros/s/AKfycbxLJUz2LovHdz5JrhBy0Db4scuK1dTssvqG8S1OcL08no6V4Jmlc-_1wiGyUctwkNiGUg/exec',
+                'https://script.google.com/macros/s/AKfycbwLA594BZhwdVHivG3azAtfU0ZVGGBCei-g_3a9YoKY-9NFomd0BbATaJCYVE9Yz2jYgA/exec',
                 {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         to: email,
