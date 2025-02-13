@@ -46,8 +46,9 @@ const Drawing = () => {
         console.log(`secretFriend >> ${friendName} & ${friendEmail}`);
 
         try {
+            // using google scripts with app email
             const response = await fetch(
-                'https://script.google.com/macros/s/AKfycbwLA594BZhwdVHivG3azAtfU0ZVGGBCei-g_3a9YoKY-9NFomd0BbATaJCYVE9Yz2jYgA/exec',
+                'https://script.google.com/macros/s/AKfycbx7LKj1xKCTUpN6fNhuf4wD2AXgTH9_NDmuG6agXv2c1RAoIq2JmVUDLQaDhXEPcb8n/exec',
                 {
                     method: 'POST',
                     mode: 'no-cors',
