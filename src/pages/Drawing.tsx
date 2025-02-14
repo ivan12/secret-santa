@@ -4,36 +4,55 @@ import { useParticipantList } from '../state/hook/useParticipantList';
 import { useDrawResult } from '../state/hook/useDrawResult';
 
 import './Drawing.css';
+import { useNavigate } from 'react-router-dom';
 
 const Drawing = () => {
     const participants = useParticipantList();
-
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
+    const [isDrew, setIsDrew] = useState(false);
+    const [isShuffling, setIsShuffling] = useState(false);
+    const [showCongrats, setShowCongrats] = useState(false);
 
+    const navigateTo = useNavigate();
     const result = useDrawResult();
 
     const draw = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        let secretFriend = null;
-        console.log('draw!!');
-        console.log('participants >> ', participants);
-        console.log('result >> ', result);
-        try {
-            participants.forEach(async currentParticipant => {
-                if (result.has(currentParticipant)) {
-                    secretFriend =
-                        result.get(currentParticipant) ?? 'Unable to get name! Try again!';
-                    await sendEmail(currentParticipant, secretFriend);
+        setIsShuffling(true); // Start shuffle animation
+        setMessage('Shuffling names...');
+
+        setTimeout(async () => {
+            setIsShuffling(false); // Stop shuffle animation
+            let secretFriend = null;
+            console.log('draw!!');
+            console.log('participants >> ', participants);
+            console.log('result >> ', result);
+
+            try {
+                setIsDrew(true);
+                for (const currentParticipant of participants) {
+                    if (result.has(currentParticipant)) {
+                        secretFriend =
+                            result.get(currentParticipant) ?? 'Unable to get name! Try again!';
+                        await sendEmail(currentParticipant, secretFriend);
+                    }
                 }
-            });
-            setMessage('All emails sent successfully! Check your email ;)');
-        } catch (error) {
-            setMessage(
-                'An error occurred while trying to send one of the emails! Please try again later ;)'
-            );
-            console.log(error);
-        }
+                setMessage('All emails sent successfully! Check your email ;)');
+
+                // Show Congratulations message after 4 seconds
+                setTimeout(() => {
+                    setShowCongrats(true);
+                }, 1000);
+            } catch (error) {
+                setMessage(
+                    'An error occurred while trying to send one of the emails! Please try again later ;)'
+                );
+                setIsDrew(false);
+                setShowCongrats(false);
+                console.log(error);
+            }
+        }, 3000); // Simulate shuffling for 3 seconds
     };
 
     const sendEmail = async (currentParticipant: string, secretFriend: string) => {
@@ -41,13 +60,11 @@ const Drawing = () => {
         const [friendName, friendEmail] = secretFriend.split(', ');
         const [name, email] = currentParticipant.split(', ');
         setMessage('Sending email to ' + name + '...');
-        console.log('sendEmail!!');
         console.log(`currentParticipant >> ${name} & ${email}`);
         console.log(`secretFriend >> ${friendName} & ${friendEmail}`);
 
         try {
-            // using google scripts with app email
-            const response = await fetch(
+            await fetch(
                 'https://script.google.com/macros/s/AKfycbx7LKj1xKCTUpN6fNhuf4wD2AXgTH9_NDmuG6agXv2c1RAoIq2JmVUDLQaDhXEPcb8n/exec',
                 {
                     method: 'POST',
@@ -60,21 +77,18 @@ const Drawing = () => {
                     }),
                 }
             );
-
-            if (!response.ok) {
-                throw new Error('Failed to send email');
-            }
-
-            const result = await response.text();
-            setMessage(result);
         } catch (error) {
             setMessage(
                 'An error occurred while trying to send one of the emails! Please try again later ;)'
             );
-            console.error(error); // Exibe o erro no console para depuração
+            console.error(error);
         } finally {
             setLoading(false);
         }
+    };
+
+    const back = () => {
+        navigateTo('/');
     };
 
     return (
@@ -86,14 +100,30 @@ const Drawing = () => {
                         Click on "Draw" - The result of your Secret Santa will be sent to everyone's
                         email!
                     </p>
-                    <button className="draw-button" onClick={event => draw(event)}>
-                        Draw
-                    </button>
+                    {!isDrew && (
+                        <button
+                            className={`draw-button ${isShuffling ? 'shuffling' : ''}`}
+                            onClick={draw}
+                            disabled={isShuffling}
+                        >
+                            {isShuffling ? 'Shuffling...' : 'Draw'}
+                        </button>
+                    )}
                 </form>
                 {loading && (
                     <p className="result" role="alert">
                         {message}
                     </p>
+                )}
+                {showCongrats && (
+                    <>
+                        <p className="congrats-message">
+                            🎉 Congratulations! Check your emails! 🎉
+                        </p>
+                        <button className="draw-button" onClick={back}>
+                            Back
+                        </button>
+                    </>
                 )}
                 <footer className="draw">
                     <img
