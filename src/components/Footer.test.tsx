@@ -63,7 +63,7 @@ describe('when there are enough participants', () => {
         fireEvent.click(button);
 
         expect(mockNavigation).toHaveBeenCalledTimes(1);
-        expect(mockNavigation).toHaveBeenCalledWith('/draw');
+        expect(mockNavigation).toHaveBeenCalledWith('/drawing');
         expect(mockDraw).toHaveBeenCalledTimes(1);
     });
 });

@@ -79,6 +79,29 @@ p {
 }
 /* END Drawing Animation */
 
+.participant-container {
+    max-height: 300px; 
+    overflow-y: auto; 
+    border-radius: 8px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.participant-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.participant-table th, .participant-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.participant-table th {
+    background-color: #f4f4f4;
+}
+
 @media screen and (max-width: 800px) {
     select {
         width: 100%;

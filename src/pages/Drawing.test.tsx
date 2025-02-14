@@ -1,64 +1,48 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import { useParticipantList } from '../state/hook/useParticipantList';
-import { useDrawResult } from '../state/hook/useDrawResult';
-import Drawing from './Drawing';
+import Drawing from '../pages/Drawing'; // Ajuste o caminho conforme necessário
 
-jest.mock('../state/hook/useParticipantList', () => {
-    return {
-        useParticipantList: jest.fn(),
-    };
-});
-jest.mock('../state/hook/useDrawResult', () => {
-    return {
-        useDrawResult: jest.fn(),
-    };
-});
+jest.useFakeTimers(); // Habilita o mock de timers
 
-describe('on the draw page', () => {
-    const participants = ['Ana', 'Catarina', 'Jorel'];
-    const result = new Map([
-        ['Ana', 'Jorel'],
-        ['Jorel', 'Catarina'],
-        ['Catarina', 'Ana'],
-    ]);
-
-    beforeEach(() => {
-        (useParticipantList as jest.Mock).mockReturnValue(participants);
-        (useDrawResult as jest.Mock).mockReturnValue(result);
-    });
-    test('all participants can view their secret friend', () => {
-        render(
+test('button changes from "Start Game" to "Shuffling..." and then displays "Congratulations"', async () => {
+    render(
+        <MemoryRouter>
             <RecoilRoot>
                 <Drawing />
             </RecoilRoot>
-        );
+        </MemoryRouter>
+    );
 
-        const options = screen.queryAllByRole('option');
-        expect(options).toHaveLength(participants.length);
-    });
-    test('the secret friend is displayed when requested', () => {
-        render(
-            <RecoilRoot>
-                <Drawing />
-            </RecoilRoot>
-        );
+    // Encontra o botão "Start Game"
+    const startButton = screen.getByText('Start Game');
 
-        const select = screen.getByPlaceholderText('Select your name');
+    // Clica no botão
+    fireEvent.click(startButton);
 
-        fireEvent.change(select, {
-            target: {
-                value: participants[0],
-            },
-        });
+    // Avança o tempo para simular a execução do timer (se houver algum delay)
+    jest.advanceTimersByTime(1000); // Ajuste o tempo conforme necessário para o seu caso
 
-        const button = screen.getByRole('button');
+    // Aguarda que o texto "Shuffling..." apareça
+    await waitFor(
+        () => {
+            expect(
+                screen.queryByText(content => content.includes('Shuffling'))
+            ).toBeInTheDocument();
+        },
+        { timeout: 5000 }
+    );
 
-        fireEvent.click(button);
+    // Avança o tempo novamente para simular a mudança para "Congratulations"
+    jest.advanceTimersByTime(1000); // Ajuste o tempo conforme necessário
 
-        const secretFriend = screen.getByRole('alert');
-
-        expect(secretFriend).toBeInTheDocument();
-    });
+    // Aguarda que o texto "Congratulations" apareça
+    await waitFor(
+        () => {
+            expect(
+                screen.queryByText(content => content.includes('Congratulations'))
+            ).toBeInTheDocument();
+        },
+        { timeout: 5000 }
+    );
 });

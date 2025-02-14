@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Card from '../components/Card';
 import { useParticipantList } from '../state/hook/useParticipantList';
 import { useDrawResult } from '../state/hook/useDrawResult';
-
 import './Drawing.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +12,7 @@ const Drawing = () => {
     const [isDrew, setIsDrew] = useState(false);
     const [isShuffling, setIsShuffling] = useState(false);
     const [showCongrats, setShowCongrats] = useState(false);
+    const [emailStatuses, setEmailStatuses] = useState<any[]>([]); // New state for email statuses
 
     const navigateTo = useNavigate();
     const result = useDrawResult();
@@ -63,6 +63,7 @@ const Drawing = () => {
         console.log(`currentParticipant >> ${name} & ${email}`);
         console.log(`secretFriend >> ${friendName} & ${friendEmail}`);
 
+        let status = 'X'; // Default to failure
         try {
             await fetch(
                 'https://script.google.com/macros/s/AKfycbx7LKj1xKCTUpN6fNhuf4wD2AXgTH9_NDmuG6agXv2c1RAoIq2JmVUDLQaDhXEPcb8n/exec',
@@ -77,13 +78,14 @@ const Drawing = () => {
                     }),
                 }
             );
+            status = '✔'; // Success
         } catch (error) {
-            setMessage(
-                'An error occurred while trying to send one of the emails! Please try again later ;)'
-            );
             console.error(error);
         } finally {
             setLoading(false);
+
+            // Update the email statuses
+            setEmailStatuses(prevStatuses => [...prevStatuses, { name, email, status }]);
         }
     };
 
@@ -123,6 +125,28 @@ const Drawing = () => {
                         <button className="draw-button" onClick={back}>
                             Back
                         </button>
+
+                        {/* Email status table */}
+                        <div className="participant-container">
+                            <table className="participant-table email-status-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {emailStatuses.map((status, index) => (
+                                        <tr key={index}>
+                                            <td>{status.name}</td>
+                                            <td>{status.email}</td>
+                                            <td>{status.status}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </>
                 )}
                 <footer className="draw">

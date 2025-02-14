@@ -21,8 +21,8 @@ describe('an empty participant list', () => {
             </RecoilRoot>
         );
 
-        const items = screen.queryAllByRole('listitem');
-        expect(items).toHaveLength(0);
+        const rows = screen.queryAllByRole('row');
+        expect(rows).toHaveLength(0);
     });
 });
 
@@ -38,7 +38,7 @@ describe('a populated participant list', () => {
             </RecoilRoot>
         );
 
-        const items = screen.queryAllByRole('listitem');
-        expect(items).toHaveLength(participants.length);
+        const items = screen.queryAllByRole('row');
+        expect(items).toHaveLength(participants.length + 1); // totalParticipants + header table
     });
 });

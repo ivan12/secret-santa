@@ -4,16 +4,21 @@ import { useErrorMessage } from '../state/hook/useErrorMessage';
 
 import './Form.css';
 import { useResetListParticipants } from '../state/hook/useResetListParticipants';
+import { useParticipantList } from '../state/hook/useParticipantList';
+import { useSetErrorMessage } from '../state/hook/useSetErrorMessage';
 
 const Form = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const errorMessage = useErrorMessage();
+    const setErrorMessage = useSetErrorMessage();
 
-    const inputRef = useRef<HTMLInputElement>(null);
+    const nameInputRef = useRef<HTMLInputElement>(null);
+    const emailInputRef = useRef<HTMLInputElement>(null);
 
     const addToList = useAddParticipant();
     const resetList = useResetListParticipants();
+    const participants = useParticipantList();
 
     const isValidEmail = (email: string) => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -21,17 +26,37 @@ const Form = () => {
 
     const isFormValid = name.trim() !== '' && isValidEmail(email);
 
+    const nameAlreadyExists = (name: string) => {
+        return participants.some(
+            (participant: string) => participant.split(',')[0].trim() === name
+        );
+    };
+
     const addParticipant = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!isFormValid) {
             setErrorMessage('Please enter a valid name and email.');
             return;
         }
+        if (nameAlreadyExists(name)) {
+            setErrorMessage('Duplicate names are not allowed!');
+            return;
+        }
         addToList(name + ', ' + email);
         setName('');
         setEmail('');
-        inputRef.current?.focus();
+        emailInputRef.current?.focus();
     };
+
+    useEffect(() => {
+        if (errorMessage) {
+            const timer = setTimeout(() => {
+                setErrorMessage('');
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [errorMessage, setErrorMessage]);
 
     useEffect(() => {
         resetList();
@@ -41,7 +66,7 @@ const Form = () => {
         <form onSubmit={addParticipant}>
             <div className="input-btn-group">
                 <input
-                    ref={inputRef}
+                    ref={nameInputRef}
                     value={name}
                     onChange={event => setName(event.target.value)}
                     type="text"
@@ -50,7 +75,7 @@ const Form = () => {
                     maxLength={30}
                 />
                 <input
-                    ref={inputRef}
+                    ref={emailInputRef}
                     value={email}
                     onChange={event => setEmail(event.target.value)}
                     type="email"

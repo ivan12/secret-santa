@@ -10,9 +10,11 @@ describe('Form.tsx behavior', () => {
                 <Form />
             </RecoilRoot>
         );
-        const input = screen.getByPlaceholderText('Enter participant names');
+        const nameInput = screen.getByPlaceholderText('Name');
+        expect(nameInput).toBeInTheDocument();
+        const emailInput = screen.getByPlaceholderText('Email');
+        expect(emailInput).toBeInTheDocument();
         const button = screen.getByRole('button');
-        expect(input).toBeInTheDocument();
         expect(button).toBeDisabled();
     });
 
@@ -23,18 +25,21 @@ describe('Form.tsx behavior', () => {
             </RecoilRoot>
         );
 
-        const input = screen.getByPlaceholderText('Enter participant names');
+        const nameInput = screen.getByPlaceholderText('Name');
+        const emailInput = screen.getByPlaceholderText('Email') as HTMLInputElement;
         const button = screen.getByRole('button');
 
-        fireEvent.change(input, {
+        fireEvent.change(nameInput, {
             target: {
-                value: 'Ana Catarina',
+                value: 'Ana',
             },
         });
 
+        fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
         fireEvent.click(button);
-        expect(input).toHaveFocus();
-        expect(input).toHaveValue('');
+
+        expect(emailInput).toHaveFocus();
+        expect(emailInput.value).toBe('');
     });
 
     test('duplicate names cannot be added to the list', () => {
@@ -43,23 +48,38 @@ describe('Form.tsx behavior', () => {
                 <Form />
             </RecoilRoot>
         );
-        const input = screen.getByPlaceholderText('Enter participant names');
+
+        const input = screen.getByPlaceholderText('Name');
         const button = screen.getByRole('button');
+
+        // 1° Add
         fireEvent.change(input, {
             target: {
                 value: 'Ana Catarina',
             },
         });
-        fireEvent.click(button);
-        fireEvent.change(input, {
+        fireEvent.change(screen.getByPlaceholderText('Email'), {
             target: {
-                value: 'Ana Catarina',
+                value: 'ana@example.com',
             },
         });
         fireEvent.click(button);
 
+        // 2° add repeated
+        fireEvent.change(input, {
+            target: {
+                value: 'Ana Catarina',
+            },
+        });
+        fireEvent.change(screen.getByPlaceholderText('Email'), {
+            target: {
+                value: 'ana2@example.com',
+            },
+        });
+        fireEvent.click(button);
+
+        // test error msg
         const errorMessage = screen.getByRole('alert');
-
         expect(errorMessage.textContent).toBe('Duplicate names are not allowed!');
     });
 
@@ -70,20 +90,35 @@ describe('Form.tsx behavior', () => {
                 <Form />
             </RecoilRoot>
         );
-        const input = screen.getByPlaceholderText('Enter participant names');
+        const input = screen.getByPlaceholderText('Name');
         const button = screen.getByRole('button');
+
+        // 1° Add
         fireEvent.change(input, {
             target: {
                 value: 'Ana Catarina',
             },
         });
+        fireEvent.change(screen.getByPlaceholderText('Email'), {
+            target: {
+                value: 'ana@example.com',
+            },
+        });
         fireEvent.click(button);
+
+        // 2° add repeated
         fireEvent.change(input, {
             target: {
                 value: 'Ana Catarina',
             },
         });
+        fireEvent.change(screen.getByPlaceholderText('Email'), {
+            target: {
+                value: 'ana2@example.com',
+            },
+        });
         fireEvent.click(button);
+
         let errorMessage = screen.queryByRole('alert');
         expect(errorMessage).toBeInTheDocument();
 

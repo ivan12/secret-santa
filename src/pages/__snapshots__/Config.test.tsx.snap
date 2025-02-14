@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`the configuration page should be rendered correctly 1`] = `
+<div>
+  <div
+    class="card"
+  >
+    <section>
+      <h2>
+        Let's get started! (Min 3 people)
+      </h2>
+      <form>
+        <div
+          class="input-btn-group"
+        >
+          <input
+            class="input-name"
+            maxlength="30"
+            placeholder="Name"
+            type="text"
+            value=""
+          />
+          <input
+            class="input-email"
+            maxlength="100"
+            placeholder="Email"
+            type="email"
+            value=""
+          />
+          <button
+            disabled=""
+          >
+            Add
+          </button>
+        </div>
+        
+      </form>
+      <footer
+        class="footer-settings"
+      >
+        <button
+          class="button"
+          disabled=""
+        >
+          Go to the draw
+        </button>
+        <img
+          alt="Shopping bags"
+          src="/images/bags.png"
+        />
+      </footer>
+    </section>
+  </div>
+</div>
+`;
