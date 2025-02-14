@@ -1,7 +1,6 @@
 .participant-container {
     max-height: 300px; /* Altura fixa para 5 linhas + cabeçalho */
     overflow-y: auto; /* Adiciona scroll quando necessário */
-    border: 1px solid #ddd;
     border-radius: 8px;
     margin-top: 20px;
 }
