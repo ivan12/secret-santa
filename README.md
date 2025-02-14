@@ -1,3 +1,6 @@
+# Project running at Vercel 
+https://secret-santa-ebon-phi.vercel.app/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -29,6 +32,35 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-## Learn More
+# Script usado para enviar email via GooGle Scripts
+```
+function doPost(e) {
+  var data = JSON.parse(e.postData.contents);
+  var emailTo = data.to;
+  var subject = data.subject;
+  var message = data.message;
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  MailApp.sendEmail({
+    to: emailTo,
+    subject: subject,
+    body: message
+  });
+
+  var jsonResponse = {
+    success: true,
+    message: "E-mail enviado com sucesso!"
+  };
+
+  return ContentService.createTextOutput(JSON.stringify(jsonResponse))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  return ContentService.createTextOutput("This script is ready to process POST requests!");
+}
+
+function doOptions(e) {
+  return ContentService.createTextOutput("")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+```
