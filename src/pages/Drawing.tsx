@@ -97,8 +97,8 @@ const Drawing = () => {
                 <h2>Who will pick the paper?</h2>
                 <form>
                     <p>
-                        Click on "Draw" - The result of your Secret Santa will be sent to everyone's
-                        email!
+                        Click on "Start Game" - The result of your Secret Santa will be sent to
+                        everyone's email!
                     </p>
                     {!isDrew && (
                         <button
@@ -106,13 +106,13 @@ const Drawing = () => {
                             onClick={draw}
                             disabled={isShuffling}
                         >
-                            {isShuffling ? 'Shuffling...' : 'Draw'}
+                            {isShuffling ? 'Shuffling...' : 'Start Game'}
                         </button>
                     )}
                 </form>
                 {loading && (
                     <p className="result" role="alert">
-                        {message}
+                        <b>{message}</b>
                     </p>
                 )}
                 {showCongrats && (

@@ -19,7 +19,7 @@ const Footer = () => {
     return (
         <footer className="footer-settings">
             <button className="button" disabled={participants.length < 3} onClick={start}>
-                Start Game
+                Go to the draw
             </button>
             <img src="/images/bags.png" alt="Shopping bags" />
         </footer>

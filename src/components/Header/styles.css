@@ -15,6 +15,18 @@
     z-index: 1;
 }
 
+.participant-container {
+    display: flex;
+    align-items: center; /* Alinha verticalmente */
+    gap: 8px; /* Espaço entre a imagem e o texto */
+}
+
+.app-version {
+    font-size: 14px;
+    color: #f6f4f4;
+    margin-top: 12rem;
+}
+
 @media screen and (max-width: 800px) {
     .header {
         padding-top: 60px;
