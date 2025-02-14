@@ -32,7 +32,7 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-# Script usado para enviar email via GooGle Scripts
+# Script used to send email via Google Scripts
 ```
 function doPost(e) {
   var data = JSON.parse(e.postData.contents);
