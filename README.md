@@ -48,7 +48,7 @@ function doPost(e) {
 
   var jsonResponse = {
     success: true,
-    message: "E-mail enviado com sucesso!"
+    message: "Email sent successfully!"
   };
 
   return ContentService.createTextOutput(JSON.stringify(jsonResponse))
