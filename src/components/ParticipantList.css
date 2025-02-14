@@ -1,0 +1,31 @@
+.participant-container {
+    max-height: 300px; /* Altura fixa para 5 linhas + cabeçalho */
+    overflow-y: auto; /* Adiciona scroll quando necessário */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.participant-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.participant-table th, .participant-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.participant-table th {
+    background-color: #f4f4f4;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 18px;
+    color: red;
+}
